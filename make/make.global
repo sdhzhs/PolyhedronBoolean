@@ -1,0 +1,30 @@
+# compile macro
+CC = g++
+CXXFLAGS += -W -O3
+LDFLAGS += -O3
+INCLUDES += -I../include
+
+# recursive make
+.PHONY: subdirs ${SUBDIRS} cleansubdirs
+subdirs: ${SUBDIRS}
+${SUBDIRS}:
+	${MAKE} -C $@ all
+
+# recursive make clean
+cleansubdirs:
+	@for dir in ${SUBDIRS}; do \
+		${MAKE} -C $$dir clean; \
+	done
+
+# dependence
+%.o: %.cpp
+	${CC} ${CXXFLAGS} ${INCLUDES} -c $< -o $@
+%.o: %.cxx
+	${CC} ${CXXFLAGS} ${INCLUDES} -c $< -o $@
+
+%.d: %.cpp
+	@echo "Creating $@ ..."
+	@set -e;rm -f $@; \
+	${CC} -MM ${INCLUDES} $< > $@.; \
+	sed 's,\($*\)\.o[: ]*,\1.o $@ : ,g' < $@. > $@; \
+	rm -f $@.
