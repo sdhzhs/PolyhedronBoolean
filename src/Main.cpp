@@ -30,7 +30,7 @@ int main() {
   ifstream fin;
   ofstream fout;
 
-//Test multi-precision rational number from different libraries
+//Test division method of rational numbers from different multi-precision libraries
 #if 1
   CGAL::Gmpq e1(1.2);
   CGAL::Gmpq e2(0.7);
@@ -660,8 +660,8 @@ int main() {
 #endif
 
 //Test intersection boolean operations between Nef_Polyhedra which are planes which represent infinite half spaces, this is another way to construct 3D closed
-//polyhendons and the vertices are constructed by intersections among planes, the result Nef_Polyhedron can include more than one closed volumes and the faces 
-//in the closed volumes can be extracted correctly. Note that the extended geometric kernel in CGAL should be used for this example.
+//polyhedra and the vertices are constructed by intersections among planes, the result Nef_Polyhedron can include more than one closed volumes and the faces 
+//in the closed volumes can be extracted correctly. Note that the extended geometric kernel in CGAL should be used for this test example.
 #if 1
   fin.open("layout_4");
   fin>>pointnum;

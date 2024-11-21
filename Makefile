@@ -1,5 +1,5 @@
 # target, subdir, objects in current dir
-TARGET = cgaltest
+TARGET = CGALNefOp
 SUBDIRS = src
 SOURCES = $(wildcard ${SUBDIRS}/*.cpp)
 OBJECTS := $(patsubst %.cpp,%.o,${SOURCES})
