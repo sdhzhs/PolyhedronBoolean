@@ -1,6 +1,6 @@
 # compile macro
 CC = g++
-CXXFLAGS += -W -O3
+CXXFLAGS += -W -O3 -fopenmp
 LDFLAGS += -O3
 INCLUDES += -I../include
 
