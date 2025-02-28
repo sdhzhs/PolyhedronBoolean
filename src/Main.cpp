@@ -4,10 +4,10 @@ using namespace std;
 using namespace cgalutil;
 
 int main() {
-  unsigned i, j, k, l, m;
+  unsigned j, k, l;
   int accuracy=1, pointnum;
   bool div;
-  realnum bound[6]={0}, xx, yy, zz, theta, thick, dv1, dv2, v1[2], v2[2];
+  realnum tol, bound[6]={0}, xx, yy, zz, theta, thick, dv1, dv2, v1[2], v2[2];
   string token;
   boundbox3d bbox;
   point3d vertpt;
@@ -65,13 +65,22 @@ int main() {
 
 //Test OFF_to_nef_3 interface in Nef_Polyhedron CGAL Package
 #if 1
-  fin.open("cgal_sufaces.off");
+  fin.open("cgal_surfaces.off");
+
+  if (!fin.is_open()) {
+      throw std::runtime_error("Failed to open file cgal_surfaces.off");
+  } 
 
   size_t discard = CGAL::OFF_to_nef_3(fin, bodym);
   fin.close();
   cout<<"discarded: "<<discard<<endl;
 
-  fin.open("cgal_sufaces.off");
+  fin.open("cgal_surfaces.off");
+
+  if (!fin.is_open()) {
+      throw std::runtime_error("Failed to open file cgal_surfaces.off");
+  }
+
   fin>>mesh;
   fin.close();
   bodyf = Nef_polyhedron(mesh);
@@ -467,7 +476,8 @@ int main() {
 
   fout.close();
 
-  CheckSmall(surfs, holes, 1e-3);
+  tol = 1e-3;
+  CheckSmall(surfs, holes, tol);
 
   CG_tools::getPolyhedronBoundBox(bodyf, bbox);
   cout<<"xmin: "<<bbox.pmin._xx<<" xmax: "<<bbox.pmax._xx<<" ymin: "<<bbox.pmin._yy<<" ymax: "<<bbox.pmax._yy<<" zmin: "<<bbox.pmin._zz<<" zmax: "<<bbox.pmax._zz<<endl;
@@ -480,6 +490,10 @@ int main() {
   unsigned surfcnt, vertcnt;
 	
   fin.open("cgal_surf_cube.out");
+
+  if (!fin.is_open()) {
+      throw std::runtime_error("Failed to open file cgal_surf_cube.out");
+  }
 
   fin>>token>>token>>surfcnt;
   surfs.resize(surfcnt);
@@ -502,6 +516,11 @@ int main() {
   CG_tools::createNefPolyhedron(vertIds, vertPts, bodyf);
 
   fin.open("cgal_nef_cube.out");
+
+  if (!fin.is_open()) {
+      throw std::runtime_error("Failed to open file cgal_nef_cube.out");
+  }
+
   fin>>bodym;
   fin.close();
 
@@ -524,6 +543,11 @@ int main() {
 //Test the possibility of generating a 3D complex from 2D layout polygons
 #if 1
   fin.open("layout_4");
+
+  if (!fin.is_open()) {
+      throw std::runtime_error("Failed to open file layout_4");
+  }
+
   fin>>pointnum;
 
   vertshp.clear();
@@ -664,6 +688,11 @@ int main() {
 //in the closed volumes can be extracted correctly. Note that the extended geometric kernel in CGAL should be used for this test example.
 #if 1
   fin.open("layout_4");
+
+  if (!fin.is_open()) {
+      throw std::runtime_error("Failed to open file layout_4");
+  }
+
   fin>>pointnum;
 
   vertshp.clear();
@@ -705,8 +734,6 @@ int main() {
 
   bodyf = Nef_polyhedron(face);
 
-  cout<<"success: b"<<endl;
-
   cout<<"number of volume: "<<bodyf.number_of_volumes()<<endl;
 
   px = vertshp[0]*accuracy;
@@ -718,8 +745,6 @@ int main() {
 
   bodym = Nef_polyhedron(face);
   bodyf *= bodym;
-
-  cout<<"success: t"<<endl;
 
   cout<<"number of volume: "<<bodyf.number_of_volumes()<<endl;
 
@@ -744,7 +769,6 @@ int main() {
     face = CGAL_plane(p, normal);
     bodym = Nef_polyhedron(face);
     bodyf *= bodym;
-    cout<<"success: "<<k<<endl;
   }
 	
   cout<<"number of volume: "<<bodyf.number_of_volumes()<<endl;
