@@ -14,7 +14,7 @@
 #include <CGAL/Lazy_exact_nt.h>
 //#include <CGAL/Cartesian.h>
 //#include <CGAL/Simple_cartesian.h>
-//#include <CGAL/Extended_homogeneous.h>
+#include <CGAL/Extended_homogeneous.h>
 //#include <CGAL/Extended_cartesian.h>
 //#include <CGAL/Filtered_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
@@ -49,19 +49,22 @@ typedef double                                                                re
 //typedef CGAL::Quotient<CGAL::MP_Float>                                        FNT;
 //typedef CGAL::Gmpq                                                            FNT;
 //typedef CORE::BigFloat                                                        FNT;
-//typedef CGAL::Exact_integer                                                   RNT;
+typedef CGAL::Exact_integer                                                   RNT;
 
 /*
  * @brief Define CGAL Kernel: Homogeneous, Cartesian and Extended Kernel
  */
 
 //typedef CGAL::Simple_cartesian<FNT>                                           CGAL_Kernel3;
-//typedef CGAL::Extended_homogeneous<RNT>                                       CGAL_Kernel3;
-//typedef CGAL::Extended_cartesian<FNT>                                         CGAL_Kernel3;
 //typedef CGAL::Cartesian<FNT>                                                  CGAL_Kernel3;
+//typedef CGAL::Extended_cartesian<FNT>                                         CGAL_Kernel3;
+#ifdef Extended_Kernel
+typedef CGAL::Extended_homogeneous<RNT>                                       CGAL_Kernel3;
+#else
+typedef CGAL::Exact_predicates_exact_constructions_kernel                     CGAL_Kernel3;
+#endif
 //typedef CGAL::Filtered_kernel<CGAL::Simple_cartesian<FNT>>                    CGAL_Kernel3;
 //typedef CGAL::Exact_predicates_inexact_constructions_kernel                   CGAL_Kernel3;
-typedef CGAL::Exact_predicates_exact_constructions_kernel                     CGAL_Kernel3;
 //typedef CGAL::Simple_cartesian<CGAL::Lazy_exact_nt<FNT> >                     CGAL_Kernel3;
 //typedef CGAL::Lazy_kernel<CGAL::Simple_cartesian<FNT> >                       CGAL_Kernel3;
 

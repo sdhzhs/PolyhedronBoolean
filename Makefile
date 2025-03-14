@@ -3,7 +3,7 @@ TARGET = CGALNefOp
 SUBDIRS = src
 SOURCES = $(wildcard ${SUBDIRS}/*.cpp)
 OBJECTS := $(patsubst %.cpp,%.o,${SOURCES})
-LDFLAGS = -lgmp -lmpfr
+LDFLAGS += -lgmp -lmpfr
 
 all:subdirs ${OBJECTS}
 	${CC} ${OBJECTS} ${LDFLAGS} -o ${TARGET}

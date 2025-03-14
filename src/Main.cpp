@@ -64,7 +64,7 @@ int main() {
 #endif
 
 //Test OFF_to_nef_3 interface in Nef_Polyhedron CGAL Package
-#if 1
+#ifndef Extended_Kernel
   fin.open("cgal_surfaces.off");
 
   if (!fin.is_open()) {
@@ -96,7 +96,7 @@ int main() {
 //Test a complete boolean operation process of two simple cubes, including construction of two original Nef_Polyhedra, difference boolean operation and extraction
 //of B-rep faces in result Nef_Polyhedron into faces lists with holes lists, both divided by volumes. Boolean operation between a Nef_Polyhedron and a plane
 //is also tested.
-#if 1
+#ifndef Extended_Kernel
   bound[0] = 2.0;
   bound[1] = 4.0;
   bound[2] = 2.0;
@@ -541,7 +541,7 @@ int main() {
 #endif
 
 //Test the possibility of generating a 3D complex from 2D layout polygons
-#if 1
+#ifndef Extended_Kernel
   fin.open("layout_4");
 
   if (!fin.is_open()) {
@@ -686,7 +686,7 @@ int main() {
 //Test intersection boolean operations between Nef_Polyhedra which are planes which represent infinite half spaces, this is another way to construct 3D closed
 //polyhedra and the vertices are constructed by intersections among planes, the result Nef_Polyhedron can include more than one closed volumes and the faces 
 //in the closed volumes can be extracted correctly. Note that the extended geometric kernel in CGAL should be used for this test example.
-#if 1
+#ifdef Extended_Kernel
   fin.open("layout_4");
 
   if (!fin.is_open()) {

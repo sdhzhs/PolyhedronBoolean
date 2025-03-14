@@ -1,5 +1,6 @@
 #include <cstring>
 #include <algorithm>
+#include <limits>
 #include "PolyOpUtils.h"
 
 #include <boost/foreach.hpp>
@@ -64,7 +65,7 @@ bool CG_tools::getNefPolyhedronVertex(Nef_polyhedron& poly, vector<point3d>& ver
 
 bool CG_tools::getPolyhedronBoundBox(Nef_polyhedron& poly, boundbox3d& boundcoord)
 {
-  double xmin(1e+20), xmax(-1e+20), ymin(1e+20), ymax(-1e+20), zmin(1e+20), zmax(-1e+20);
+  double xmin, xmax, ymin, ymax, zmin, zmax;
   vector<point3d> vertPts;
 
   if(poly.is_empty())
@@ -75,6 +76,14 @@ bool CG_tools::getPolyhedronBoundBox(Nef_polyhedron& poly, boundbox3d& boundcoor
     cerr<<"Divide no vertex!"<<endl;
     return false;
   }
+
+  double DBLMAX = std::numeric_limits<double>::max();
+  xmin = DBLMAX;
+  xmax = -DBLMAX;
+  ymin = DBLMAX;
+  ymax = -DBLMAX;
+  zmin = DBLMAX;
+  zmax = -DBLMAX;
 
   for(uint j=0; j!=vertPts.size(); ++j)
   {

@@ -7,7 +7,7 @@ Data structure
 
 The concepts of Nef_Polyhedron are very suitable for the target of doing three-dimensional Boolean operations between two polyhedra. The Nef_Polyhedron can be considered as mathematical extension of commonly used 3D geometric concepts - polyhedron. It can treat many corner and degenerated scenarios when doing 3D Boolean operations. The data structure of Nef_Polyhedron includes sets of half-faces, half-edges and vertices, please refer to the documentation of CGAL for detail of organization of these half-kind geometric elements. CGAL provides sufficient iterators to traverse these geometric elements without the knowledge of internal data structure in Nef_Polyhedron.
 
-There are supplementary data structures in this repository which represent surface mesh to build the polyhedra (inputs) or extract faces/vertices lists (outputs). Only the C++ STL containers instantiated by 3D double-precision points or CGAL internal points are used to represent the additional data structures so that they are easy to be understood for a C++ developer.
+There are supplementary data structures in this repository which represent surface mesh to build the polyhedra (inputs) or lists to extract faces/vertices (outputs). Only the C++ STL containers instantiated by 3D double-precision points or CGAL internal points are used to represent the additional data structures so that they are easy to be understood for a C++ developer.
  
 Algorithm
 
@@ -22,7 +22,7 @@ The ideas of original Nef_Polyhedra construction include the way from a complete
 
 Usage
 
-Before build the codes, a recent CGAL package should be installed as dependence. This repository has been tested under the version 4.0 and 5.0 series for CGAL self-built from source codes or deployed by Linux distros. Note that since version 5.0, CGAL becomes head-only library so that no binary linking option is needed. For example, in Ubuntu desktop distro, just type
+Before build the codes, a recent CGAL package should be installed as dependence. This repository has been tested under the version 4.0 and 5.0 series for CGAL self-built from source codes or deployed by Linux distros. Note that since version 5.0, CGAL becomes head-only library so that no binary linking option is needed. For example, in Ubuntu desktop/server distro, just type
 
 sudo apt-get install libcgal-dev
 
@@ -37,6 +37,20 @@ in a Unix-like OS environment in which g++ has been deployed, then an exec named
 make clean
 
 can clean all executable and object files.
+
+Using pre-process macro based conditional compilation, the extended geometric kernel in CGAL can be compiled with the Nef_Polyhedron package, just type
+
+make MACRO=Extended_Kernel
+
+and a version of CGALNefOp with extended homogeneous kernel will be generated.
+
+"CGALNefOp" belongs to a test program calling most of the functions in the middle-level library. Many output files which represent faces list, surface mesh or native format of Nef_Polyhedron will be generated after executing it. Type a bash shell script
+
+./regdiff.sh
+
+to run a regression test and get the differences between the outputs and golden files in "golden" directory. The script will also work for testing extended kernel if setting enviroment MACRO=Extended_Kernel before running it.
+
+Test cases
 
 The codes in source file Main.cpp represent some test examples which call middle-level interfaces in this repository. The examples include
 1.  Test division method of rational numbers from different multi-precision libraries

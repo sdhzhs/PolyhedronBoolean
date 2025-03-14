@@ -4,6 +4,10 @@ SUBDIRS =
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(patsubst %.cpp,%.o,${SOURCES})
 
+ifdef MACRO
+  CXXFLAGS += -D${MACRO}
+endif
+
 all:subdirs ${OBJECTS}
 
 clean:cleansubdirs
