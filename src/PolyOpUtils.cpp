@@ -542,11 +542,13 @@ bool CG_tools::isCollinear(const vector<CGAL_point>& pts , const CGAL_point& ptc
 bool CG_tools::isClockWise(const vector<point3d>& pts, point3d& ptc)
 {
   int Ibound[6];
-  double tol(1e-8), bound[6];
+  double bound[6];
+
+  if(pts.size() < 3) return false;
   
   GetSurfBound(pts, bound, Ibound);
   CGAL_point pt1, pt2, pt3, pt4;
-  if(bound[1]-bound[0]>tol) {
+  if(bound[1]-bound[0]>0.0) {
     uint imin = Ibound[0];
     uint inext = (imin+1)%pts.size();
     uint innext = (imin+2)%pts.size();
@@ -583,6 +585,8 @@ bool CG_tools::isClockWise(const vector<point3d>& pts, point3d& ptc)
 
 bool CG_tools::isClockWiseCGAL(const vector<CGAL_point>& pts, CGAL_point& ptc)
 {
+  if(pts.size() < 3) return false;
+
   CGAL_vector vec1(ptc.x()-pts[0].x() , ptc.y()-pts[0].y() , ptc.z()-pts[0].z());
   CGAL_vector vec2(pts[1].x()-pts[0].x() , pts[1].y()-pts[0].y() , pts[1].z()-pts[0].z());
   CGAL_vector vec3(pts[2].x()-pts[1].x() , pts[2].y()-pts[1].y() , pts[2].z()-pts[1].z());
@@ -869,7 +873,15 @@ double GetBodySurfArea(vector<vector<int>> &vertIds, vector<point3d> &vertPts)
 
 void GetSurfBound(const vector<point3d> &vertPts, double bound[6], int Ibound[6])
 {
-  double xmin(1e+20), xmax(-1e+20), ymin(1e+20), ymax(-1e+20), zmin(1e+20), zmax(-1e+20);
+  double xmin, xmax, ymin, ymax, zmin, zmax;
+
+  double DBLMAX = std::numeric_limits<double>::max();
+  xmin = DBLMAX;
+  xmax = -DBLMAX;
+  ymin = DBLMAX;
+  ymax = -DBLMAX;
+  zmin = DBLMAX;
+  zmax = -DBLMAX;
 
   for(uint j=0; j!=vertPts.size(); ++j)
   {
@@ -917,10 +929,12 @@ void ConvertFacesToMesh(vector<vector<point3d>> &Faces, vector<point3d> &vertPts
   vector<int> vertId;
 
   surfcnt = Faces.size();
+  if(surfcnt == 0) return;
+
   vertPts.clear();
   vertIds.clear();
-
   vertId.clear();
+
   vertcnt = Faces[0].size();
   for(i=0; i!=vertcnt; ++i)
   {
@@ -967,10 +981,12 @@ void MapFacesToMesh(vector<vector<point3d>> &Faces, vector<point3d> &vertPts, ve
   map< point3d, int, Less_point3d >::iterator fcur;
 
   surfcnt = Faces.size();
+  if(surfcnt == 0) return;
+
   vertPts.clear();
   vertIds.clear();
-
   vertId.clear();
+
   vertcnt = Faces[0].size();
   for(i=0; i!=vertcnt; ++i)
   {
