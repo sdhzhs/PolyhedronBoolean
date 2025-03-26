@@ -2,8 +2,7 @@
 #define POLY_OP_UTILS_H
 #include <vector>
 #include <map>
-#include <string>
-#include <fstream>
+#include "PolyBasics.h"
 
 #include <CGAL/Exact_integer.h>
 #include <CGAL/Exact_rational.h>
@@ -27,19 +26,12 @@
 //#include <CGAL/Nef_3/SNC_indexed_items.h>
 //#include <CGAL/Polyhedron_items_with_id_3.h>
 #include <CGAL/Surface_mesh.h>
-#include <CGAL/boost/graph/convert_nef_polyhedron_to_polygon_mesh.h>
-#include <CGAL/IO/Nef_polyhedron_iostream_3.h>
-#include <CGAL/OFF_to_nef_3.h>
 
 /*#ifndef CGAL_DONT_USE_LAZY_KERNEL
 #include <CGAL/Lazy_kernel.h>
 #endif*/
 
 namespace cgalutil {
-
-typedef unsigned int                                                          uint;
-typedef double                                                                realnum;
-
 /*
  * @brief Define NumberType: FNT for Field, RNT for Ring
  */
@@ -97,80 +89,6 @@ typedef Polyhedron::Facet_handle                                              Fa
 typedef CGAL::Surface_mesh<CGAL_point>                                        Surface_mesh;
 
 /*
- * @brief Define Basic Data Structure for double precision Geometric Objects
- */
-
-struct point3d{
-    point3d( double xx, double yy, double zz )
-      :   _xx( xx )
-        , _yy( yy )
-        , _zz( zz )
-    {
-      ;
-    }
-    point3d() {;}
-    double _xx;
-    double _yy;
-    double _zz;
-};
-
-struct Less_point3d{
-    bool operator()(const point3d &p1, const point3d &p2) const
-    {
-      if(p1._xx < p2._xx) {
-        return true;
-      } else if(p1._xx > p2._xx) {
-        return false;
-      } else {
-        if(p1._yy < p2._yy) {
-          return true;
-        } else if(p1._yy > p2._yy) {
-          return false;
-        } else {
-          if(p1._zz < p2._zz) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-    }
-};
-
-struct polyprop{
-    polyprop(uint von, uint fn, uint en, uint ven)
-      :   volnum(von)
-        , facenum(fn)
-        , edgenum(en)
-        , vertnum(ven)
-    {
-      ;
-    }
-    polyprop():volnum(0), facenum(0), edgenum(0), vertnum(0) {;}
-    uint volnum, facenum, edgenum, vertnum;
-};
-
-struct boundbox3d{
-    boundbox3d( point3d& p1, point3d& p2 )
-      :   pmin( p1 )
-        , pmax( p2 )
-    {
-      ;
-    }
-    boundbox3d( double xmin, double xmax, double ymin, double ymax, double zmin, double zmax )
-    {
-      pmin._xx = xmin;
-      pmin._yy = ymin;
-      pmin._zz = zmin;
-      pmax._xx = xmax;
-      pmax._yy = ymax;
-      pmax._zz = zmax;
-    }
-    boundbox3d() {;}
-    point3d pmin, pmax;
-};
-
-/*
  * @brief Define Class to Construct Polyhedron from Surface Mesh based on Nef_Polyhedron CGAL Package
  */
 
@@ -192,12 +110,12 @@ class CGAL_Build_PolySet : public CGAL::Modifier_base<typename Polyhedron::Halfe
       CGAL_Polybuilder B(hds, true);
       B.begin_surface(_points.size(), _polyIndexs.size());
 
-      for(uint i  =0 ; i < _points.size() ; i++) {
+      for(unsigned i  =0 ; i < _points.size() ; i++) {
         const point3d & pt = _points[i];
         CGAL_point p( (FT)pt._xx , (FT)pt._yy , (FT)pt._zz);
         B.add_vertex(p);
       }
-      for(uint i =0; i < _polyIndexs.size(); i++){
+      for(unsigned i =0; i < _polyIndexs.size(); i++){
           std::vector<int>   pindices = _polyIndexs[i];
           if (pindices.size() >=3) {
             B.add_facet(pindices.begin(), pindices.end());
@@ -244,7 +162,7 @@ class CG_tools{
     static void generateNefPolyhedronByCGALPoints(const std::vector<std::vector<CGAL_point> >& faces, Nef_polyhedron& tarPoly);
 
     /*
-     * @brief Create Nef_Polyhedron from Faces List described by Basic Data Lists
+     * @brief Create Nef_Polyhedron from Faces List described by Basic Point Lists
      */
     static void generateNefPolyhedronByLocalPoints(const std::vector<std::vector<point3d> >& faces, Nef_polyhedron& tarPoly);
 
@@ -259,12 +177,12 @@ class CG_tools{
     static bool getPolyhedronBoundBox(Nef_polyhedron& poly, boundbox3d& boundcoord);
 
     /*
-     * @brief Extract all Vertices in one Nef_Polyhedron into one Basic Data List
+     * @brief Extract all Vertices in one Nef_Polyhedron into one Basic Point List
      */
     static bool getNefPolyhedronVertex(Nef_polyhedron& poly , std::vector<point3d>& vertices);
 
     /*
-     * @brief Convert all Faces in one Nef_Polyhedron into Surface Mesh (Triangularized for Faces with Holes) and Extract all Cells into Faces List described by Basic Data
+     * @brief Convert all Faces in one Nef_Polyhedron into Surface Mesh (Triangularized for Faces with Holes) and Extract all Cells into Faces List described by Basic Point
      */
     static bool getNefPolyhedronSurface(Nef_polyhedron& poly , std::vector<std::vector<point3d> >& faces);
 
@@ -275,7 +193,7 @@ class CG_tools{
 
     /*
      * @brief Extract all Marked (Constitute closed Volumes) Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and
-     * one Hole Faces List described by Basic Data, there are more than one hole faces corresponding to one boundary face
+     * one Hole Faces List described by Basic Point, there are more than one hole faces corresponding to one boundary face
      */
     static bool getNefPolyhedronFace(Nef_polyhedron& poly , std::vector<std::vector<point3d>>& boundarys,  std::vector<std::vector<std::vector<point3d>>>& holes);
 
@@ -286,12 +204,12 @@ class CG_tools{
     static bool getNefPolyhedronCGALFace(Nef_polyhedron& poly , std::vector<std::vector<CGAL_point>>& boundarys,  std::vector<std::vector<std::vector<CGAL_point>>>& holes);
 
     /*
-     * @brief Extract all Half Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and one Hole Faces List described by Basic Data
+     * @brief Extract all Half Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and one Hole Faces List described by Basic Point
      */
     static bool getNefPolyhedronFaces(Nef_polyhedron& poly , std::vector<std::vector<point3d>>& boundarys,  std::vector<std::vector<std::vector<point3d>>>& holes);
 
     /*
-     * @brief Extract all Marked (Constitute closed Volumes) Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and one Hole Faces List described by Basic Data,
+     * @brief Extract all Marked (Constitute closed Volumes) Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and one Hole Faces List described by Basic Point,
      * the top Level of these two Lists are Divided by closed Volumes in this Nef_Polyhedron
      */
     static bool getNefPolyhedronFaceByVolume(Nef_polyhedron& poly , std::vector<std::vector<std::vector<point3d>>>& boundarys,  std::vector<std::vector<std::vector<std::vector<point3d>>>>& holes);
@@ -303,7 +221,7 @@ class CG_tools{
     static bool getNefPolyhedronCGALFaceByVolume(Nef_polyhedron& poly , std::vector<std::vector<std::vector<CGAL_point>>>& boundarys,  std::vector<std::vector<std::vector<std::vector<CGAL_point>>>>& holes);
 
     /*
-     * @brief Extract all Half Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and one Hole Faces List described by Basic Data,
+     * @brief Extract all Half Faces (with Holes) in one Nef_Polyhedron into one Boundary Faces List and one Hole Faces List described by Basic Point,
      * the top Level of these two Lists are Divided by all Volumes (including Outter Space) in this Nef_Polyhedron
      */
     static bool getNefPolyhedronFacesByVolume(Nef_polyhedron& poly, std::vector<std::vector<std::vector<point3d>>>& boundarys, std::vector<std::vector<std::vector<std::vector<point3d>>>>& holes);
@@ -320,7 +238,7 @@ class CG_tools{
     static bool isCollinear(const std::vector<CGAL_point>& pts ,const  CGAL_point& ptc);
 
     /*
-     * @brief Predicate whether a points List described by Basic Data is ClockWise from the perspective described by a vector
+     * @brief Predicate whether a points List described by Basic Point is ClockWise from the perspective described by a vector
      */
     static bool isClockWise(const std::vector<point3d>& pts, point3d& ptc);
 
@@ -340,9 +258,29 @@ class CG_tools{
     static bool isClosed(std::vector<std::vector<int> > &polyIndexs , const std::vector<point3d> &points);
 
     /*
-     * @brief Convert a List of CGAL_point into a List of Basic Data
+     * @brief Convert a List of CGAL_point into a List of Basic Point
      */
     static bool convertCgalPointTo3d(const std::vector<CGAL_point>& originPts , std::vector<point3d>& pts);
+
+    /*
+     * @brief Convert a Nef_Polyhedron into a Surface Mesh
+     */
+    static bool convertNefToMesh(Nef_polyhedron& nef, Surface_mesh& mesh);
+
+    /*
+     * @brief Read a Polyhedron from one OFF file and convert it into a Nef_Polyhedron
+     */
+    static bool convertOFFToNef(std::ifstream& fin, Nef_polyhedron& nef);
+
+    /*
+     * @brief Read a Nef_Polyhedron from a specially formatted file
+     */
+    static bool LoadNefPolyhedron(std::ifstream& fin, Nef_polyhedron& nef);
+
+    /*
+     * @brief Save a Nef_Polyhedron into a specially formatted file
+     */
+    static bool SaveNefPolyhedron(Nef_polyhedron& nef, std::ofstream& fout);
     
     /*
      * @brief Union Operation of two Nef_Polyhedra
@@ -359,25 +297,6 @@ class CG_tools{
      */
     static bool nefPolyhedronInter(Nef_polyhedron& nef1 , Nef_polyhedron& nef2 , Nef_polyhedron& result);
 };
-
-/*
- * @brief Define Geometric Ordering and Calculation Functions for Basic Operations of Data Structure
- */
-
-double DotProduct(double *v1, double *v2, int ndims);
-void CrossProduct(double v1[3], double v2[3], double v3[3]);
-double PolyArea(std::vector<point3d> &vertPts);
-void GenBlockSurfMeshPnts(std::vector<point3d> &vertPts, double bound[6]);
-void GenTrapSurfMeshIds(std::vector<std::vector<int>> &vertIds, int npts);
-void GenTriSurfMeshIds(std::vector<std::vector<int>> &vertIds, int npts);
-double GetBodySurfArea(std::vector<std::vector<int>> &vertIds, std::vector<point3d> &vertPts);
-void GetSurfBound(const std::vector<point3d> &vertPts, double bound[6], int Ibound[6]);
-void ConvertFacesToMesh(std::vector<std::vector<point3d>> &Faces, std::vector<point3d> &vertPts, std::vector<std::vector<int>> &vertIds);
-void MapFacesToMesh(std::vector<std::vector<point3d>> &Faces, std::vector<point3d> &vertPts, std::vector<std::vector<int>> &vertIds);
-void SaveSurfVec(std::vector<std::vector<point3d>> &Divsurfs, std::vector<std::vector<std::vector<point3d>>> &Divholes, std::ofstream &fout);
-void SaveVertVec(std::vector<point3d> &vertPts, const std::string &filename);
-void SaveMeshVec(std::vector<point3d> &vertPts, std::vector<std::vector<int>> &vertIds, const std::string &filename);
-void CheckSmall(std::vector<std::vector<point3d>> &Divsurfs, std::vector<std::vector<std::vector<point3d>>> &Divholes, double tol);
 
 }
 

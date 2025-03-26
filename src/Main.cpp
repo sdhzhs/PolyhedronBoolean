@@ -71,9 +71,10 @@ int main() {
       throw std::runtime_error("Failed to open file cgal_surfaces.off");
   } 
 
-  size_t discard = CGAL::OFF_to_nef_3(fin, bodym);
+  div = CG_tools::convertOFFToNef(fin, bodym);
   fin.close();
-  cout<<"discarded: "<<discard<<endl;
+
+  if(!div) cout<<"discarded!"<<endl;
 
   fin.open("cgal_surfaces.off");
 
@@ -136,7 +137,7 @@ int main() {
   if(!bodyf.is_valid()) cout<<"nef is not valid!"<<endl;
 
   mesh.clear();
-  CGAL::convert_nef_polyhedron_to_polygon_mesh(bodyf, mesh);
+  CG_tools::convertNefToMesh(bodyf, mesh);
   if(!CGAL::is_closed(mesh)) cout<<"mesh is not closed"<<endl;
   if(!mesh.is_valid()) cout<<"mesh is not valid"<<endl;
 
@@ -521,7 +522,7 @@ int main() {
       throw std::runtime_error("Failed to open file cgal_nef_cube.out");
   }
 
-  fin>>bodym;
+  CG_tools::LoadNefPolyhedron(fin, bodym);
   fin.close();
 
   if(bodym == bodyf)
@@ -669,7 +670,7 @@ int main() {
   fout.close();
 
   mesh.clear();
-  CGAL::convert_nef_polyhedron_to_polygon_mesh(bodyf, mesh);
+  CG_tools::convertNefToMesh(bodyf, mesh);
   //bodyf.convert_to_polyhedron(polysurf);
 
   fout.open("cgal_mesh_layout.off");
@@ -677,7 +678,7 @@ int main() {
   fout.close();
 
   fout.open("cgal_nef_layout.out");
-  fout<<bodyf;
+  CG_tools::SaveNefPolyhedron(bodyf, fout);
   fout.close();
 
   cout<<"--------------------------"<<endl;
@@ -774,7 +775,7 @@ int main() {
   cout<<"number of volume: "<<bodyf.number_of_volumes()<<endl;
 
   fout.open("cgal_nef_interplane.out");
-  fout<<bodyf;
+  CG_tools::SaveNefPolyhedron(bodyf, fout);
   fout.close();
 
   div = CG_tools::getNefPolyhedronFace(bodyf, surfs, holes);
@@ -786,7 +787,7 @@ int main() {
   fout.close();
 
   mesh.clear();
-  CGAL::convert_nef_polyhedron_to_polygon_mesh(bodyf, mesh);
+  CG_tools::convertNefToMesh(bodyf, mesh);
 
   fout.open("cgal_mesh_interplane.off");
   fout<<mesh;

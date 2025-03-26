@@ -3,6 +3,7 @@ SUBDIRS =
 
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(patsubst %.cpp,%.o,${SOURCES})
+CXXFLAGS += -fPIC
 
 ifdef MACRO
   CXXFLAGS += -D${MACRO}
