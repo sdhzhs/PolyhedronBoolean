@@ -4,6 +4,7 @@ SUBDIRS =
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(patsubst %.cpp,%.o,${SOURCES})
 CXXFLAGS += -fPIC
+#CXXFLAGS += -I/home/sdhzhs/Downloads/CGAL-6.0.1/include
 
 ifdef MACRO
   CXXFLAGS += -D${MACRO}

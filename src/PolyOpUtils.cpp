@@ -472,7 +472,7 @@ bool CG_tools::getNefPolyhedronSurface(Nef_polyhedron& poly , vector<vector<poin
 
   Surface_mesh mesh;
   CGAL::convert_nef_polyhedron_to_polygon_mesh(poly , mesh);
-  for(mesh_face_descriptor& fb : mesh.faces()){
+  for(const mesh_face_descriptor& fb : mesh.faces()){
     mesh_halfedge_descriptor eb = halfedge(fb , mesh);
     mesh_halfedge_descriptor ee(eb);
     vector<point3d> face;
@@ -508,7 +508,7 @@ bool CG_tools::getNefPolyhedronCGALSurface(Nef_polyhedron& poly , vector<vector<
 
   Surface_mesh mesh;
   CGAL::convert_nef_polyhedron_to_polygon_mesh(poly , mesh);
-  for(mesh_face_descriptor& fb : mesh.faces()){
+  for(const mesh_face_descriptor& fb : mesh.faces()){
     mesh_halfedge_descriptor eb = halfedge(fb , mesh);
     mesh_halfedge_descriptor ee(eb);
     vector<CGAL_point> face;
