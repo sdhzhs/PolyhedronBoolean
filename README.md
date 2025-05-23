@@ -32,7 +32,7 @@ There is a hierarchical Makefile system in this repository, just type
 
 make
 
-in a Unix-like OS environment in which g++ has been deployed, then an exec named "CGALNefOp" will be generated. Moreover, type
+in a Unix-like OS environment in which g++ has been deployed, then a shared library named "libNefOp.so" and an exec named "CGALNefOp" will be generated. Moreover, type
 
 make clean
 
@@ -42,7 +42,7 @@ Using pre-process macro based conditional compilation, the extended geometric ke
 
 make MACRO=Extended_Kernel
 
-and a version of CGALNefOp with extended homogeneous kernel will be generated.
+and a version of libNefOp.so and CGALNefOp with extended homogeneous kernel will be generated.
 
 "CGALNefOp" belongs to a test program calling most of the functions in the middle-level library. Many output files which represent faces list, surface mesh or native format of Nef_Polyhedron will be generated after executing it. Type a bash shell script
 
