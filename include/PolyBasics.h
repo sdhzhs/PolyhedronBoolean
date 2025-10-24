@@ -13,6 +13,9 @@ typedef double                                                                re
  * @brief Define Basic Data Structure for double precision Geometric Objects
  */
 
+/*
+ * @brief 3D double precision points with constructor
+ */
 struct point3d{
     point3d( double xx, double yy, double zz )
       :   _xx( xx )
@@ -27,6 +30,9 @@ struct point3d{
     double _zz;
 };
 
+/*
+ * @brief Comparative functor between two 3D points
+ */
 struct Less_point3d{
     bool operator()(const point3d &p1, const point3d &p2) const
     {
@@ -50,6 +56,9 @@ struct Less_point3d{
     }
 };
 
+/*
+ * @brief Geometric properties of a polyhedron
+ */
 struct polyprop{
     polyprop(uint von, uint fn, uint en, uint ven)
       :   volnum(von)
@@ -63,6 +72,9 @@ struct polyprop{
     uint volnum, facenum, edgenum, vertnum;
 };
 
+/*
+ * @brief Boundary box of a 3D geometric object
+ */
 struct boundbox3d{
     boundbox3d( point3d& p1, point3d& p2 )
       :   pmin( p1 )

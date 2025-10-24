@@ -62,4 +62,4 @@ The codes in source file Main.cpp represent some test examples which call middle
 7.  Test the possibility of generating a 3D complex from 2D layout polygons
 8.  Test intersection Boolean operations between Nef_Polyhedra which are planes which represent infinite half spaces, this is another way to construct 3D closed polyhedra
 
-Refer to comments in the head file PolyOpUtils.h to understand what each data structure represents and what each function does.
+Refer to comments in the head files PolyBasics.h and PolyOpUtils.h to understand what each data structure represents and what each function does.
