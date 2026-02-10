@@ -1,23 +1,25 @@
 #ifndef POLY_OP_UTILS_H
 #define POLY_OP_UTILS_H
-#include <vector>
 #include <map>
 #include "PolyBasics.h"
 
 #include <CGAL/Exact_integer.h>
-#include <CGAL/Exact_rational.h>
-#include <CGAL/MP_Float.h>
-#include <CGAL/Quotient.h>
-#include <CGAL/Gmpq.h>
+//#include <CGAL/Exact_rational.h>
+//#include <CGAL/MP_Float.h>
+//#include <CGAL/Quotient.h>
+//#include <CGAL/Gmpq.h>
 #include <CGAL/CORE_BigFloat.h>
-#include <CGAL/Lazy_exact_nt.h>
-//#include <CGAL/Cartesian.h>
-//#include <CGAL/Simple_cartesian.h>
+//#include <CGAL/Lazy_exact_nt.h>
+#ifdef Extended_Kernel
 #include <CGAL/Extended_homogeneous.h>
 //#include <CGAL/Extended_cartesian.h>
 //#include <CGAL/Filtered_kernel.h>
+#else
+//#include <CGAL/Cartesian.h>
+//#include <CGAL/Simple_cartesian.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 //#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#endif
 //#include <CGAL/utils.h>
 //#include <CGAL/utility.h>
 //#include <CGAL/minkowski_sum_3.h>

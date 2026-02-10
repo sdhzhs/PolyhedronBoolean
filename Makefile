@@ -6,9 +6,9 @@ SOURCES = $(wildcard ${SUBDIRS}/*.cpp)
 OBJECTS := $(patsubst %.cpp,%.o,${SOURCES})
 MAINOBJ := ${SUBDIRS}/Main.o
 LIBOBJS := $(subst ${MAINOBJ},,${OBJECTS})
-LDFLAGS += -lgmp -lmpfr
-LIBFLAGS += -L. -lNefOp -Wl,-rpath='$$ORIGIN' -Wl,--enable-new-dtags
-LDD = --shared -fPIC -O3
+LDFLAGS := -lgmp -lmpfr
+LIBFLAGS := -L. -lNefOp
+LDD := --shared -fPIC -O3
 
 all:subdirs ${LIB} ${OBJECTS}
 	${CC} ${MAINOBJ} ${LIBFLAGS} ${LDFLAGS} -o ${TARGET}
@@ -17,7 +17,7 @@ ${LIB}: ${LIBOBJS}
 	${CC} ${LDD} ${LIBOBJS} -o ${LIB}
 
 clean:cleansubdirs
-	rm -f ${TARGET} ${LIB} ${OBJECTS}
+	rm -f ${TARGET} ${LIB}
 
 # path of "make global scripts"
 # NOTE, use absolute path. export once, use in all subdirs
